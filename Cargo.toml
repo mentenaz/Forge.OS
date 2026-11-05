@@ -5,6 +5,8 @@ members = [
   "crates/shell-core",
   "crates/shell-keys",
   "crates/shell-surface",
+  "crates/forge-font",
+  "crates/forge-desktop",
   "crates/shell-host",
   "crates/shell-bedrock",
   "crates/surface",
@@ -15,6 +17,8 @@ default-members = [
   "crates/shell-core",
   "crates/shell-keys",
   "crates/shell-surface",
+  "crates/forge-font",
+  "crates/forge-desktop",
   "crates/shell-host",
   "crates/surface",
   "crates/surface-preview",
@@ -30,6 +34,8 @@ platform   = { path = "crates/platform" }
 shell-core = { path = "crates/shell-core" }
 shell-keys = { path = "crates/shell-keys" }
 shell-surface = { path = "crates/shell-surface" }
+forge-font = { path = "crates/forge-font" }
+forge-desktop = { path = "crates/forge-desktop" }
 
 surface    = { path = "crates/surface" }
 

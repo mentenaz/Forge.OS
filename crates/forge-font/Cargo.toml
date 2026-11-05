@@ -1,0 +1,10 @@
+[package]
+name = "forge-font"
+description = "The Noto Sans Mono bitmap font as a glyph source for the surface crate. no_std, no allocation."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+surface.workspace = true
+noto-sans-mono-bitmap.workspace = true

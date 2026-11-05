@@ -1,0 +1,16 @@
+[package]
+name = "forge-desktop"
+description = "The Forge.OS desktop scene: layout, theme and drawing, on a Surface. no_std, no allocation."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+pixel.workspace = true
+platform.workspace = true
+shell-core.workspace = true
+shell-surface.workspace = true
+surface.workspace = true
+
+[dev-dependencies]
+forge-font.workspace = true

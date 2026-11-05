@@ -1,4 +1,14 @@
 //! The kernel console's font, as a glyph source for the surface.
+//!
+//! Bedrock's boot console draws Noto Sans Mono, regular weight, 16 pixels
+//! high, from pre-rasterised bitmaps compiled into the kernel. This crate hands
+//! the same bitmaps to [`surface`], so the console, the host preview and the
+//! kernel's desktop all draw the same letters. It needs no allocation and no
+//! operating system.
+
+#![cfg_attr(not(test), no_std)]
+#![forbid(unsafe_code)]
+#![warn(missing_docs, missing_debug_implementations)]
 
 use noto_sans_mono_bitmap::{FontWeight, RasterHeight, get_raster, get_raster_width};
 use surface::{Glyph, GlyphSource};
@@ -51,5 +61,16 @@ mod tests {
         };
         assert!(ink('W') > 0);
         assert_eq!(ink(' '), 0);
+    }
+
+    #[test]
+    fn the_cell_is_seven_by_sixteen() {
+        assert_eq!(NotoMono.cell_width(), 7);
+        assert_eq!(NotoMono::LINE_HEIGHT, 16);
+    }
+
+    #[test]
+    fn a_character_outside_basic_latin_has_no_glyph() {
+        assert!(NotoMono.glyph('\u{4e2d}').is_none());
     }
 }

@@ -92,6 +92,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "forge-desktop"
+version = "0.1.0"
+dependencies = [
+ "forge-font",
+ "pixel",
+ "platform",
+ "shell-core",
+ "shell-surface",
+ "surface",
+]
+
+[[package]]
+name = "forge-font"
+version = "0.1.0"
+dependencies = [
+ "noto-sans-mono-bitmap",
+ "surface",
+]
+
+[[package]]
 name = "handle-space"
 version = "0.2.0"
 source = "git+https://github.com/mentenaz/wizards-bedrock?rev=8bfe390#8bfe39009a7526f6ecb0256bf1b91c8190b86246"
@@ -341,11 +361,9 @@ dependencies = [
 name = "surface-preview"
 version = "0.1.0"
 dependencies = [
- "noto-sans-mono-bitmap",
+ "forge-desktop",
+ "forge-font",
  "pixel",
- "platform",
- "shell-core",
- "shell-surface",
  "surface",
 ]
 
