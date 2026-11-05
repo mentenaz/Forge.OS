@@ -1,0 +1,9 @@
+[package]
+name = "surface"
+description = "A pixel surface to draw on: rectangles, clipping, blending, blits and text. Pure logic, host-testable."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+pixel.workspace = true

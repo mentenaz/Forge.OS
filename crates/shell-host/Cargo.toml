@@ -1,0 +1,8 @@
+[package]
+name = "shell-host"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+crossterm = "0.29.0"

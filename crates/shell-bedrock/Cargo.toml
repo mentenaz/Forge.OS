@@ -1,0 +1,11 @@
+[package]
+name = "shell-bedrock"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+platform.workspace = true
+shell-core.workspace = true
+ring-proto.workspace = true
+handle-space.workspace = true

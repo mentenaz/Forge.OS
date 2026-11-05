@@ -1,0 +1,35 @@
+[workspace]
+resolver = "3"
+members = [
+  "crates/platform",
+  "crates/shell-core",
+  "crates/shell-host",
+  "crates/shell-bedrock",
+  "crates/surface",
+  "crates/surface-preview",
+]
+default-members = [
+  "crates/platform",
+  "crates/shell-core",
+  "crates/shell-host",
+  "crates/surface",
+  "crates/surface-preview",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97"
+
+[workspace.dependencies]
+platform   = { path = "crates/platform" }
+shell-core = { path = "crates/shell-core" }
+
+surface    = { path = "crates/surface" }
+
+ring-proto   = { git = "https://github.com/mentenaz/wizards-bedrock", rev = "8bfe390" }
+handle-space = { git = "https://github.com/mentenaz/wizards-bedrock", rev = "8bfe390" }
+pixel        = { git = "https://github.com/mentenaz/wizards-bedrock", rev = "8bfe390" }
+ps2-keys     = { git = "https://github.com/mentenaz/wizards-bedrock", rev = "8bfe390" }
+
+noto-sans-mono-bitmap = { version = "0.3", default-features = false, features = ["regular", "size_16", "unicode-basic-latin"] }

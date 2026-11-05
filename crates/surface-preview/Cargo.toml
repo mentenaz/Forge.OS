@@ -1,0 +1,11 @@
+[package]
+name = "surface-preview"
+description = "Draws a scene with the surface crate and saves it as a PNG, so it can be looked at on the host."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+surface.workspace = true
+pixel.workspace = true
+noto-sans-mono-bitmap.workspace = true
