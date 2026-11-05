@@ -1,0 +1,14 @@
+[package]
+name = "shell-surface"
+description = "Shows the shell's character grid on a pixel surface. Pure logic, host-testable."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+platform.workspace = true
+surface.workspace = true
+pixel.workspace = true
+
+[dev-dependencies]
+shell-core.workspace = true

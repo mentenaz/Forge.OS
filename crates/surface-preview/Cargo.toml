@@ -8,4 +8,7 @@ rust-version.workspace = true
 [dependencies]
 surface.workspace = true
 pixel.workspace = true
+platform.workspace = true
+shell-core.workspace = true
+shell-surface.workspace = true
 noto-sans-mono-bitmap.workspace = true

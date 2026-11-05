@@ -4,6 +4,9 @@
 //! what shows here is what the kernel framebuffer will show.
 
 use pixel::{Channel, PixelFormat, Rgb};
+use platform::{Display, Event, Key, KeyEvent, KeyState, Modifiers};
+use shell_core::Shell;
+use shell_surface::{NoSink, Palette, SurfaceDisplay};
 use surface::{Rect, Surface};
 
 use crate::font::NotoMono;
@@ -12,6 +15,9 @@ use crate::font::NotoMono;
 pub const WIDTH: usize = 800;
 /// Height of the preview picture.
 pub const HEIGHT: usize = 480;
+
+/// What the shell's `uptime` command is told the machine has been running.
+const UPTIME_NS: u64 = 102_000_000_000;
 
 const SKY_TOP: Rgb = Rgb::from_hex(0x0f1420);
 const SKY_BOTTOM: Rgb = Rgb::from_hex(0x1d2744);
@@ -88,39 +94,30 @@ fn window(surface: &mut Surface<'_>, frame: Rect, title: &str) {
 
 fn shell_contents(surface: &mut Surface<'_>, frame: Rect) {
     let font = NotoMono;
-    let content = Rect::new(
-        frame.x + 1,
-        frame.y + 31,
-        frame.width - 2,
-        frame.height - 32,
-    );
-    let line = NotoMono::LINE_HEIGHT as i32 + 4;
-    let (x, mut y) = (content.x + 12, content.y + 12);
 
-    // Nothing the text does may reach the border: the content is a clip.
-    surface.set_clip(content);
-    for (prompt, text) in [
-        ("$ ", "help"),
-        ("  ", "help  echo  clear  uptime  exit"),
-        ("$ ", "uptime"),
-        ("  ", "up 0:01:42"),
-        (
-            "$ ",
-            "echo a line that is much too long for this window and must be cut off at the edge",
-        ),
-    ] {
-        let after = surface.draw_text(x, y, &font, prompt, ACCENT);
-        surface.draw_text(after as i32, y, &font, text, TEXT);
-        y += line;
-    }
-    let after = surface.draw_text(x, y, &font, "$ ", ACCENT);
-    let cell = surface::GlyphSource::cell_width(&font) as u32;
-    surface.blend_rect(
-        Rect::new(after as i32, y, cell, NotoMono::LINE_HEIGHT as u32),
-        TEXT,
-        200,
+    // The shell runs in a text area inside the window, above the button.
+    let area = Rect::new(frame.x + 13, frame.y + 43, frame.width - 26, 224);
+    let palette = Palette::new(BODY, TEXT, Rgb::from_hex(0xffffff));
+    let mut display = SurfaceDisplay::new(
+        &mut *surface,
+        &font,
+        NotoMono::LINE_HEIGHT + 4,
+        area,
+        palette,
+        NoSink,
     );
-    surface.reset_clip();
+    let mut shell: Shell<80, 24, 80> = Shell::new();
+    shell.begin(display.size());
+    for line in ["help", "uptime", "echo hello from Forge.OS"] {
+        for ch in line.chars() {
+            shell.feed(key(Key::Char(ch)), UPTIME_NS);
+        }
+        shell.feed(key(Key::Enter), UPTIME_NS);
+    }
+    for ch in "ech".chars() {
+        shell.feed(key(Key::Char(ch)), UPTIME_NS);
+    }
+    shell.render(&mut display);
 
     // A button in the corner, with a translucent highlight across its top half.
     let button = Rect::new(
@@ -143,6 +140,14 @@ fn shell_contents(surface: &mut Surface<'_>, frame: Rect) {
         "Run",
         Rgb::from_hex(0xffffff),
     );
+}
+
+fn key(key: Key) -> Event {
+    Event::Key(KeyEvent {
+        key,
+        state: KeyState::Down,
+        modifiers: Modifiers::default(),
+    })
 }
 
 fn offset(rect: Rect, dx: i32, dy: i32) -> Rect {
@@ -184,7 +189,7 @@ mod tests {
     /// The scene, fingerprinted. If drawing changes on purpose, look at the
     /// new picture, then update this number; if it changes by accident, a
     /// drawing primitive has changed behaviour.
-    const GOLDEN: u64 = 728_222_996_402_039_696;
+    const GOLDEN: u64 = 16_229_775_929_036_131_055;
 
     #[test]
     fn the_scene_is_the_picture_we_looked_at() {
@@ -201,10 +206,11 @@ mod tests {
         let words = render();
         let at = |x: usize, y: usize| words[y * WIDTH + x];
         let pack = |colour| format().pack(colour);
-        // The right border of the shell window (x = 80 + 560 - 1) is still the border
-        // on the row of the over-long line, so the text did not escape its clip.
-        let long_line_row = 64 + 31 + 12 + 4 * (16 + 4) + 8;
-        assert_eq!(at(80 + 560 - 1, long_line_row), pack(EDGE));
+        // The shell's text stops inside the window: its right border is still the
+        // border on every row of the text area.
+        for row in [64 + 60, 64 + 100, 64 + 150, 64 + 200] {
+            assert_eq!(at(80 + 560 - 1, row), pack(EDGE), "row {row}");
+        }
         // The notes window starts at x = 650 and runs off the picture without wrapping.
         assert_eq!(at(WIDTH - 1, 330), pack(BODY));
         assert_eq!(

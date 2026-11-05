@@ -74,6 +74,23 @@ impl Rect {
             && (y as i64) < self.bottom()
     }
 
+    /// The smallest rectangle holding both. An empty rectangle holds nothing,
+    /// so it adds nothing: the union with one is the other.
+    pub const fn union(self, other: Self) -> Self {
+        if self.is_empty() {
+            return other;
+        }
+        if other.is_empty() {
+            return self;
+        }
+        Self::from_edges(
+            min(self.x as i64, other.x as i64),
+            min(self.y as i64, other.y as i64),
+            max(self.right(), other.right()),
+            max(self.bottom(), other.bottom()),
+        )
+    }
+
     /// The pixels in both rectangles, or [`Rect::EMPTY`] if there are none.
     pub const fn intersect(self, other: Self) -> Self {
         Self::from_edges(
@@ -191,5 +208,75 @@ mod tests {
         assert_eq!(Rect::from_edges(3, 3, 9, 3), Rect::EMPTY);
         assert_eq!(Rect::from_edges(3, 5, 9, 2), Rect::EMPTY);
         assert_eq!(Rect::from_edges(5, 0, 2, 9), Rect::EMPTY);
+    }
+
+    #[test]
+    fn the_union_is_the_bounding_box_of_two_rectangles() {
+        let a = Rect::new(0, 0, 2, 2);
+        let b = Rect::new(5, 3, 2, 4);
+        assert_eq!(a.union(b), Rect::new(0, 0, 7, 7));
+        assert_eq!(b.union(a), a.union(b));
+        assert_eq!(a.union(a), a);
+        let inner = Rect::new(1, 1, 1, 1);
+        assert_eq!(a.union(inner), a, "a rectangle inside another adds nothing");
+        assert_eq!(
+            Rect::new(-4, -4, 2, 2).union(Rect::new(1, 1, 2, 2)),
+            Rect::new(-4, -4, 7, 7)
+        );
+    }
+
+    #[test]
+    fn an_empty_rectangle_adds_nothing_to_a_union_wherever_it_is() {
+        let a = Rect::new(3, 3, 2, 2);
+        assert_eq!(a.union(Rect::new(100, 100, 0, 5)), a);
+        assert_eq!(Rect::new(-100, -100, 5, 0).union(a), a);
+        assert_eq!(Rect::EMPTY.union(Rect::EMPTY), Rect::EMPTY);
+    }
+
+    #[test]
+    fn every_pixel_of_either_rectangle_is_in_the_union_for_every_small_pair() {
+        for ax in -2..3 {
+            for ay in -2..3 {
+                for aw in 0..3 {
+                    for ah in 0..3 {
+                        for bx in -2..3 {
+                            for by in -2..3 {
+                                for bw in 0..3 {
+                                    for bh in 0..3 {
+                                        let a = Rect::new(ax, ay, aw, ah);
+                                        let b = Rect::new(bx, by, bw, bh);
+                                        let both = a.union(b);
+                                        for x in -4..6 {
+                                            for y in -4..6 {
+                                                if a.contains(x, y) || b.contains(x, y) {
+                                                    assert!(both.contains(x, y), "{a:?} {b:?}");
+                                                }
+                                            }
+                                        }
+                                        let area =
+                                            |r: Rect| i64::from(r.width) * i64::from(r.height);
+                                        assert!(area(both) >= area(a).max(area(b)));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn the_union_of_the_largest_rectangles_does_not_overflow() {
+        let low = Rect::new(i32::MIN, i32::MIN, 1, 1);
+        let high = Rect::new(i32::MAX, i32::MAX, 1, 1);
+        let both = low.union(high);
+        assert_eq!(both.x, i32::MIN);
+        assert_eq!(both.y, i32::MIN);
+        assert_eq!(
+            both.width,
+            u32::MAX,
+            "pulled in to what a rectangle can hold"
+        );
     }
 }

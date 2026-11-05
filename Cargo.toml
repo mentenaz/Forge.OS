@@ -4,6 +4,7 @@ members = [
   "crates/platform",
   "crates/shell-core",
   "crates/shell-keys",
+  "crates/shell-surface",
   "crates/shell-host",
   "crates/shell-bedrock",
   "crates/surface",
@@ -13,6 +14,7 @@ default-members = [
   "crates/platform",
   "crates/shell-core",
   "crates/shell-keys",
+  "crates/shell-surface",
   "crates/shell-host",
   "crates/surface",
   "crates/surface-preview",
@@ -27,6 +29,7 @@ rust-version = "1.97"
 platform   = { path = "crates/platform" }
 shell-core = { path = "crates/shell-core" }
 shell-keys = { path = "crates/shell-keys" }
+shell-surface = { path = "crates/shell-surface" }
 
 surface    = { path = "crates/surface" }
 
