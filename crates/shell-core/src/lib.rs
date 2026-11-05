@@ -29,6 +29,7 @@ const BANNER: &str = "shell ready, try 'help'";
 ///
 /// The input line never wraps: it stops accepting characters one column short
 /// of the right edge. The grid needs at least four columns to show a prompt.
+#[derive(Debug)]
 pub struct Shell<const C: usize, const R: usize, const N: usize> {
     term: Terminal<C, R>,
     editor: LineEditor<N>,

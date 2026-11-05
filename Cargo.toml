@@ -3,6 +3,7 @@ resolver = "3"
 members = [
   "crates/platform",
   "crates/shell-core",
+  "crates/shell-keys",
   "crates/shell-host",
   "crates/shell-bedrock",
   "crates/surface",
@@ -11,6 +12,7 @@ members = [
 default-members = [
   "crates/platform",
   "crates/shell-core",
+  "crates/shell-keys",
   "crates/shell-host",
   "crates/surface",
   "crates/surface-preview",
@@ -24,6 +26,7 @@ rust-version = "1.97"
 [workspace.dependencies]
 platform   = { path = "crates/platform" }
 shell-core = { path = "crates/shell-core" }
+shell-keys = { path = "crates/shell-keys" }
 
 surface    = { path = "crates/surface" }
 

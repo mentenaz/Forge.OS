@@ -12,6 +12,7 @@ use platform::{Cell, Display, Size, Style};
 ///
 /// The active size can be smaller after a [`Terminal::resize`]; whatever no
 /// longer fits is discarded, never reflowed.
+#[derive(Debug)]
 pub struct Terminal<const C: usize, const R: usize> {
     cells: [[char; C]; R],
     size: Size,

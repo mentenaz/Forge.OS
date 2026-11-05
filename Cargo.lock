@@ -189,6 +189,11 @@ dependencies = [
 ]
 
 [[package]]
+name = "ps2-keys"
+version = "0.2.0"
+source = "git+https://github.com/mentenaz/wizards-bedrock?rev=8bfe390#8bfe39009a7526f6ecb0256bf1b91c8190b86246"
+
+[[package]]
 name = "quote"
 version = "1.0.47"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -267,6 +272,15 @@ name = "shell-host"
 version = "0.1.0"
 dependencies = [
  "crossterm",
+]
+
+[[package]]
+name = "shell-keys"
+version = "0.1.0"
+dependencies = [
+ "platform",
+ "ps2-keys",
+ "shell-core",
 ]
 
 [[package]]

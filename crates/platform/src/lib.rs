@@ -13,6 +13,10 @@
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
 
+mod geometry;
+
+pub use geometry::CellGeometry;
+
 /// A grid size in character cells.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct Size {

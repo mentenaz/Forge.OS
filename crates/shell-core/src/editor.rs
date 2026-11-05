@@ -5,6 +5,7 @@
 //! plain byte array that is always valid UTF-8.
 
 /// An editable line of at most `N` bytes with a cursor.
+#[derive(Debug)]
 pub struct LineEditor<const N: usize> {
     buf: [u8; N],
     len: usize,

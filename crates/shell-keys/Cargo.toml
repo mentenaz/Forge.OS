@@ -1,0 +1,13 @@
+[package]
+name = "shell-keys"
+description = "Turns the kernel's decoded keystrokes into the shell's key events. Pure logic, host-testable."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+ps2-keys.workspace = true
+platform.workspace = true
+
+[dev-dependencies]
+shell-core.workspace = true
